@@ -90,6 +90,8 @@ export default class CourseUtils {
         const languages = WikiLanguages ? JSON.parse(WikiLanguages) : [];
         const projects = WikiProjects ? JSON.parse(WikiProjects) : [];
 
+        const mappedOrRealProject = projectMappings[prefix1] || (projects.includes(prefix1) ? prefix1 : null);
+
         // Special case for Meta and Commons shorthands
         if (prefix1 === 'm') {
           project = 'wikimedia';
@@ -99,8 +101,8 @@ export default class CourseUtils {
           project = 'wikimedia';
           language = 'commons';
           title = parts.slice(1).join(':');
-        } else if (projectMappings[prefix1]) {
-          project = projectMappings[prefix1];
+        } else if (mappedOrRealProject) {
+          project = mappedOrRealProject;
           // Check for language in next part
           if (parts.length >= 3 && languages.includes(parts[1].toLowerCase())) {
             language = parts[1].toLowerCase();
@@ -108,19 +110,10 @@ export default class CourseUtils {
           } else {
             title = parts.slice(1).join(':');
           }
-        } else if (languages.includes(prefix1) && !projects.includes(prefix1)) {
+        } else if (languages.includes(prefix1)) {
           project = 'wikipedia';
           language = prefix1;
           title = parts.slice(1).join(':');
-        } else if (projects.includes(prefix1)) {
-          project = prefix1;
-          // Check for language in next part
-          if (parts.length >= 3 && languages.includes(parts[1].toLowerCase())) {
-            language = parts[1].toLowerCase();
-            title = parts.slice(2).join(':');
-          } else {
-            title = parts.slice(1).join(':');
-          }
         }
 
         if (project) {
