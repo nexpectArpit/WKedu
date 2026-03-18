@@ -42,11 +42,7 @@ const initialState = {
 };
 
 const isLimitReached = (course_start, last_date) => {
-  const lastDate = toDate(last_date, true);
-  // If last_date is missing or invalid, we cannot have reached the limit yet.
-  if (!lastDate) return false;
-  const courseStartDate = toDate(course_start);
-  return isAfter(courseStartDate, lastDate) || isBefore(lastDate, subYears(new Date(), 5));
+  return isAfter(toDate(course_start), toDate(last_date)) || isBefore(toDate(last_date), subYears(new Date(), 5));
 };
 
 export default function revisions(state = initialState, action) {
@@ -54,8 +50,8 @@ export default function revisions(state = initialState, action) {
     case INCREASE_LIMIT: {
       let revisionsDisplayed = state.revisionsDisplayed.concat(
         state.revisions.slice(
-          state.revisionsDisplayed.length, state.revisionsDisplayed.length + REVISIONS_INCREMENT
-        )
+            state.revisionsDisplayed.length, state.revisionsDisplayed.length + REVISIONS_INCREMENT
+          )
       );
       // since newly fetched revisions are sorted by date(descending) if the user changes the sorting parameter and then loads
       // more revisions, the table would not be sorted correctly. The new revisions would just be appended to the end
@@ -76,8 +72,8 @@ export default function revisions(state = initialState, action) {
     case INCREASE_LIMIT_COURSE_SPECIFIC: {
       let revisionsDisplayedCourseSpecific = state.revisionsDisplayedCourseSpecific.concat(
         state.courseScopedRevisions.slice(
-          state.revisionsDisplayedCourseSpecific.length, state.revisionsDisplayedCourseSpecific.length + REVISIONS_INCREMENT
-        )
+            state.revisionsDisplayedCourseSpecific.length, state.revisionsDisplayedCourseSpecific.length + REVISIONS_INCREMENT
+          )
       );
       // since newly fetched revisions are sorted by date(descending) if the user changes the sorting parameter and then loads
       // more revisions, the table would not be sorted correctly. The new revisions would just be appended to the end
@@ -219,8 +215,7 @@ export default function revisions(state = initialState, action) {
 
       const sortedRevisions = sortByKey(state.revisionsDisplayed, action.key, null, desc, absolute);
       const sortedCourseScopedRevisions = sortByKey(state.revisionsDisplayedCourseSpecific, action.key, null, desc, absolute);
-      return {
-        ...state,
+      return { ...state,
         revisionsDisplayed: sortedRevisions.newModels,
         revisionsDisplayedCourseSpecific: sortedCourseScopedRevisions.newModels,
         sort: {

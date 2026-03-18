@@ -7,9 +7,8 @@ import { format, isValid, parseISO } from 'date-fns';
 // this exists because unlike moment-js, date-fns doesn't have a generalized toDate function
 /**
  * @param  {Date|string} date
- * @param {boolean} [suppressError] - if true, returns null for invalid/missing dates instead of current date
- * @returns {Date|null}
- */
+ * @param {boolean} suppressError
+*/
 export const toDate = (date, suppressError) => {
   if (date instanceof Date) {
     return date;
@@ -20,9 +19,8 @@ export const toDate = (date, suppressError) => {
     if (!suppressError) {
       // eslint-disable-next-line no-console
       console.error('date is null or undefined');
-      return new Date();
     }
-    return null;
+    return new Date();
   }
 
   const parsedDate = parseISO(date);
