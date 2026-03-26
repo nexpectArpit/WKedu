@@ -112,13 +112,13 @@ export default class CourseUtils {
           }
         } else if (languages.includes(prefix1)) {
           language = prefix1;
-          
+
           let prefix2 = null;
           if (parts.length >= 3) {
             prefix2 = parts[1].toLowerCase();
           }
           const mappedOrRealProject2 = prefix2 ? (projectMappings[prefix2] || (projects.includes(prefix2) ? prefix2 : null)) : null;
-          
+
           if (mappedOrRealProject2) {
             project = mappedOrRealProject2;
             title = parts.slice(2).join(':');
