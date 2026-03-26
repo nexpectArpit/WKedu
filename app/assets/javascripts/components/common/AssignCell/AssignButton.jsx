@@ -257,12 +257,13 @@ const AssignButton = ({ course, role, course_id, wikidataLabels = {}, hideAssign
       }
 
       const article = CourseUtils.articleFromTitleInput(articleTitle);
-      articlesTitles.push(article.article_url ? article.title : articleTitle);
+      const formattedTitle = CourseUtils.formattedArticleTitle(article, course.home_wiki);
+      articlesTitles.push(formattedTitle);
       articleLanguage = article.language;
       articleProject = article.project;
     });
 
-    setTitle(text);
+    setTitle(articlesTitles.join('\n'));
     setProject(articleProject || course.home_wiki.project);
     setLanguage(articleLanguage || (course.home_wiki.language || 'www'));
   };
