@@ -46,6 +46,33 @@ describe WikiApi do
         /Failed to fetch content for Ragesoss with response status: nil/
       )
     end
+
+    it 'bubbles errors the caller wants to handle, without retry or Sentry capture' do
+      api_error = MediawikiApi::ApiError.new
+      call_count = 0
+      allow_any_instance_of(MediawikiApi::Client).to receive(:send) do
+        call_count += 1
+        raise api_error
+      end
+      expect_any_instance_of(described_class).not_to receive(:log_error)
+      expect do
+        described_class.new.query(titles: 'X') { |e| e.is_a?(MediawikiApi::ApiError) }
+      end.to raise_error(MediawikiApi::ApiError)
+      expect(call_count).to eq(1)
+    end
+
+    it 'still retries and logs errors the caller declines to handle' do
+      api_error = MediawikiApi::ApiError.new
+      call_count = 0
+      allow_any_instance_of(MediawikiApi::Client).to receive(:send) do
+        call_count += 1
+        raise api_error
+      end
+      expect_any_instance_of(described_class).to receive(:log_error).once
+      result = described_class.new.query(titles: 'X') { |_e| false }
+      expect(result).to be_nil
+      expect(call_count).to eq(3)
+    end
   end
 
   describe '#get_page_content' do

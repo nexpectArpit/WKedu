@@ -19,10 +19,14 @@ class WikiApi
   # Entry points #
   ################
 
-  # General entry point for making arbitrary queries of a MediaWiki wiki's API
-  def query(query_parameters)
+  # General entry point for making arbitrary queries of a MediaWiki wiki's API.
+  # An optional block can be passed to intercept errors: if the block returns
+  # truthy for a given exception, the exception bubbles up to the caller
+  # without retry or Sentry logging. Otherwise the default retry/log/return-nil
+  # behavior applies.
+  def query(query_parameters, &caller_handles)
     http_method = query_parameters[:http_method] || :get
-    mediawiki('query', query_parameters.merge(http_method:))
+    mediawiki('query', query_parameters.merge(http_method:), &caller_handles)
   end
 
   def meta(type, params = {})
@@ -105,11 +109,12 @@ class WikiApi
     @data
   end
 
-  def mediawiki(action, query)
+  def mediawiki(action, query, &caller_handles)
     tries ||= 3
     @mediawiki = api_client
     @mediawiki.send(action, query)
   rescue StandardError => e
+    raise if caller_handles&.call(e)
     tries -= 1
     # Continue for typical errors so that the request can be retried, but wait
     # a short bit in the case of 429 — too many request — errors.
