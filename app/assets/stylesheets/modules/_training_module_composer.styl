@@ -299,11 +299,104 @@
         flex-direction column
         gap 18px
 
+    .training_module_composer__editor__source__label
+        display flex
+        align-items baseline
+        gap 8px
+
     .training_module_composer__editor__source textarea
         font-family "Menlo", "Consolas", monospace
         min-height 240px
         width 100%
         box-sizing border-box
+
+.training_module_composer__cheatsheet__toggle
+    background none
+    border none
+    padding 0
+    color #3366cc
+    font-size 0.85em
+    text-decoration underline
+    cursor pointer
+
+    &:hover
+        color #1a4699
+
+    &[aria-expanded="true"]
+        font-weight 600
+
+.training_module_composer__cheatsheet__panel
+    position relative
+    background #fafafa
+    border 1px solid #ddd
+    border-radius 4px
+    padding 14px 32px 14px 16px
+    margin 4px 0 8px
+    box-sizing border-box
+
+    .training_module_composer__cheatsheet__close
+        position absolute
+        top 6px
+        right 8px
+        background none
+        border none
+        font-size 1.4em
+        line-height 1
+        color #666
+        cursor pointer
+        padding 0 4px
+
+        &:hover
+            color #000
+
+    .training_module_composer__cheatsheet__table
+        width 100%
+        border-collapse collapse
+        font-size 0.9em
+
+        th, td
+            padding 6px 8px
+            text-align left
+            vertical-align top
+            border-bottom 1px solid #f0f0f0
+
+        th
+            font-weight 600
+            white-space nowrap
+            width 1%
+
+        pre
+            margin 0
+            font-family "Menlo", "Consolas", monospace
+            font-size 0.95em
+            background #f6f6f6
+            padding 4px 6px
+            border-radius 3px
+            white-space pre-wrap
+
+        ul, ol
+            margin 0
+            padding-left 18px
+
+        blockquote
+            margin 0
+            padding-left 8px
+            border-left 3px solid #ccc
+            color #555
+
+    .training_module_composer__cheatsheet__notes
+        margin 10px 0 0
+        padding-left 18px
+        font-size 0.85em
+        color #555
+
+        li
+            margin-bottom 3px
+
+    .training_module_composer__cheatsheet__footer
+        margin 10px 0 0
+        font-size 0.85em
+        color #555
 
     .training_module_composer__editor__preview
         label

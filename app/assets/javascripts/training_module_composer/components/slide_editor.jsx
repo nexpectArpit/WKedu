@@ -1,6 +1,8 @@
-import React, { useMemo } from 'react';
+/* eslint-disable i18next/no-literal-string */
+import React, { useMemo, useState } from 'react';
 import createMarkdown from '../../utils/markdown_it';
 import { slugifyTitle } from '../utils/slugify.js';
+import { MarkdownCheatsheetToggle, MarkdownCheatsheetPanel } from './markdown_cheatsheet.jsx';
 
 const md = createMarkdown({ openLinksExternally: true });
 
@@ -20,6 +22,8 @@ const SlideEditor = ({ slide, index, moduleId, onChange, collision }) => {
   const previewHtml = useMemo(() => md.render(slide.content || ''), [slide.content]);
   const slideId = moduleId ? moduleId * 100 + index + 1 : null;
   const filename = `${slideId ? String(slideId).padStart(4, '0') : '—'}-${effectiveSlug || 'slug'}.yml`;
+  const [cheatsheetOpen, setCheatsheetOpen] = useState(false);
+  const toggleCheatsheet = () => setCheatsheetOpen(open => !open);
 
   const handleTitleChange = (event) => {
     const newTitle = event.target.value;
@@ -64,7 +68,11 @@ const SlideEditor = ({ slide, index, moduleId, onChange, collision }) => {
 
       <div className="training_module_composer__editor__panes">
         <div className="training_module_composer__field training_module_composer__editor__source">
-          <label htmlFor="slide_content">Markdown</label>
+          <div className="training_module_composer__editor__source__label">
+            <label htmlFor="slide_content">Markdown</label>
+            <MarkdownCheatsheetToggle isOpen={cheatsheetOpen} onToggle={toggleCheatsheet} />
+          </div>
+          {cheatsheetOpen && <MarkdownCheatsheetPanel onClose={toggleCheatsheet} />}
           <textarea
             id="slide_content"
             rows={14}
