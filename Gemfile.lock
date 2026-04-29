@@ -8,6 +8,18 @@ GIT
       rails
 
 GIT
+  remote: https://github.com/WikiEducationFoundation/mediawiki-ruby-api
+  revision: 3eebf48ff49ba9ee116a4c6df889b49a09271758
+  branch: expose-response-on-http-error
+  specs:
+    mediawiki_api (0.9.0)
+      faraday (>= 2.7.0)
+      faraday-cookie_jar
+      faraday-follow_redirects
+      faraday-multipart
+      faraday-retry
+
+GIT
   remote: https://github.com/WikiEducationFoundation/rapidfire
   revision: 02dcb1723a28ef1872b62e60dabc5e7d98247957
   branch: master
@@ -335,12 +347,6 @@ GEM
       rest-client (>= 2.0.2)
     marcel (1.0.4)
     matrix (0.4.3)
-    mediawiki_api (0.9.0)
-      faraday (>= 2.7.0)
-      faraday-cookie_jar
-      faraday-follow_redirects
-      faraday-multipart
-      faraday-retry
     memory_profiler (1.0.0)
     method_source (1.1.0)
     mime-types (3.6.0)
@@ -730,7 +736,7 @@ DEPENDENCIES
   jbuilder
   kt-paperclip
   mailgun-ruby
-  mediawiki_api
+  mediawiki_api!
   memory_profiler
   mysql2
   newrelic_rpm

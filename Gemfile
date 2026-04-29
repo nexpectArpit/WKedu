@@ -56,8 +56,13 @@ gem 'rapidfire', git: 'https://github.com/WikiEducationFoundation/rapidfire', br
 
 ### HTTP and API tools
 gem 'faraday' # Standard HTTP library
-gem 'mediawiki_api' # Library for querying mediawiki API'
-# gem 'mediawiki_api', git: 'https://github.com/ragesoss/mediawiki-ruby-api', branch: 'master'
+# Pointing at our fork so we get HttpError#response — needed to honor
+# Retry-After on 429s. Switch back to plain `gem 'mediawiki_api'` once
+# https://gerrit.wikimedia.org/r/admin/repos/mediawiki/ruby/api releases
+# the upstream merge.
+gem 'mediawiki_api',
+    git: 'https://github.com/WikiEducationFoundation/mediawiki-ruby-api',
+    branch: 'expose-response-on-http-error'
 gem 'restforce' # Salesforce API access
 gem 'oj' # JSON Parsing library
 gem 'rss' # Standard RSS library
