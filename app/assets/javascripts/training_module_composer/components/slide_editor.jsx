@@ -1,8 +1,9 @@
 /* eslint-disable i18next/no-literal-string */
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import createMarkdown from '../../utils/markdown_it';
 import { slugifyTitle } from '../utils/slugify.js';
 import { MarkdownCheatsheetToggle, MarkdownCheatsheetPanel } from './markdown_cheatsheet.jsx';
+import CommonsImagePicker from './commons_image_picker.jsx';
 
 const md = createMarkdown({ openLinksExternally: true });
 
@@ -24,6 +25,27 @@ const SlideEditor = ({ slide, index, moduleId, onChange, collision }) => {
   const filename = `${slideId ? String(slideId).padStart(4, '0') : '—'}-${effectiveSlug || 'slug'}.yml`;
   const [cheatsheetOpen, setCheatsheetOpen] = useState(false);
   const toggleCheatsheet = () => setCheatsheetOpen(open => !open);
+  const [imagePickerOpen, setImagePickerOpen] = useState(false);
+  const textareaRef = useRef(null);
+
+  const handleInsertImage = (markup) => {
+    const ta = textareaRef.current;
+    const current = slide.content || '';
+    const start = ta ? ta.selectionStart : current.length;
+    const end = ta ? ta.selectionEnd : current.length;
+    const before = current.slice(0, start);
+    const after = current.slice(end);
+    const next = `${before}${markup}${after}`;
+    onChange({ content: next });
+    setImagePickerOpen(false);
+    requestAnimationFrame(() => {
+      if (!ta) return;
+      ta.focus();
+      const caret = start + markup.length;
+      ta.selectionStart = caret;
+      ta.selectionEnd = caret;
+    });
+  };
 
   const handleTitleChange = (event) => {
     const newTitle = event.target.value;
@@ -71,19 +93,33 @@ const SlideEditor = ({ slide, index, moduleId, onChange, collision }) => {
           <div className="training_module_composer__editor__source__label">
             <label htmlFor="slide_content">Markdown</label>
             <MarkdownCheatsheetToggle isOpen={cheatsheetOpen} onToggle={toggleCheatsheet} />
+            <button
+              type="button"
+              className="training_module_composer__cheatsheet__toggle"
+              onClick={() => setImagePickerOpen(true)}
+            >
+              insert image
+            </button>
           </div>
           {cheatsheetOpen && <MarkdownCheatsheetPanel onClose={toggleCheatsheet} />}
           <textarea
+            ref={textareaRef}
             id="slide_content"
             rows={14}
             value={slide.content}
             onChange={e => onChange({ content: e.target.value })}
           />
         </div>
+        {imagePickerOpen && (
+          <CommonsImagePicker
+            onInsert={handleInsertImage}
+            onClose={() => setImagePickerOpen(false)}
+          />
+        )}
 
         <div className="training_module_composer__editor__preview">
           <label>Preview</label>
-          <div className="training__slide__content">
+          <div className="training__slide training__slide__content">
             <h2>{slide.title || <em>Untitled slide</em>}</h2>
             <div dangerouslySetInnerHTML={{ __html: previewHtml }} />
           </div>

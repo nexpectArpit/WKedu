@@ -448,7 +448,11 @@
     background #fff
     padding 24px
     border-radius 4px
-    width min(720px, 90vw)
+    // width + max-width rather than min(): Stylus has its own min() that
+    // intercepts the CSS function and resolves it statically (picking the
+    // vw value), so `width min(720px, 90vw)` compiles to `width: 90vw`.
+    width 720px
+    max-width 90vw
     max-height 85vh
     overflow-y auto
     box-shadow 0 8px 24px rgba(0,0,0,0.25)
@@ -476,3 +480,133 @@
     margin-top 6px
     color #2a6b2a
     font-style italic
+
+.training_module_composer__image_picker
+    // Sized so the modal interior matches the 750px preview stage exactly
+    // (= $slide_inner_content_width + 24px modal padding on each side).
+    // See note above on width vs min().
+    width 798px
+    max-width 95vw
+
+    select
+        padding 8px 10px
+        font-size 1em
+        border 1px solid #ccc
+        border-radius 3px
+        background #fff
+
+    .training_module_composer__image_picker__row
+        display grid
+        grid-template-columns 1fr 1fr
+        gap 14px
+        margin-top 12px
+
+        +below(tablet)
+            grid-template-columns 1fr
+
+    .training_module_composer__image_picker__inline_check
+        display flex
+        align-items center
+        gap 6px
+        font-weight normal
+        font-size 0.85em
+        margin-top 4px
+        cursor pointer
+
+        input[type="checkbox"]
+            margin 0
+
+    .training_module_composer__image_picker__preview
+        margin-top 14px
+
+        > label
+            font-weight 600
+            font-size 0.9em
+            display block
+            margin-bottom 4px
+
+    .training_module_composer__image_picker__preview__stage
+        background #fafafa
+        padding 16px
+        border-radius 3px
+        min-height 120px
+        overflow auto
+        // Match the real training slide's content width so the alt-layout
+        // percentages render at the same pixel widths they will after insert.
+        box-sizing content-box
+        width 750px
+        max-width 100%
+        margin 0 auto
+
+        // Clear floats inside preview so the stage grows around floated figures.
+        &::after
+            content ''
+            display block
+            clear both
+
+    .training_module_composer__image_picker__status
+        color #555
+        margin 0
+        font-style italic
+
+// Mirror of training_modules/_slides.styl figure rules so the composer's
+// previews render the same as a live training slide. The composer page only
+// loads main.styl, not training.styl, so without this the figure styling
+// (border, layout classes) would not apply to the preview panes.
+.training__slide figure
+    padding 10px
+    border 1px solid #A0A0A0
+    display table
+    table-layout fixed
+    margin 0 auto 21px auto
+    max-width 100%
+
+    img
+        max-width 100%
+        height auto
+
+    figcaption
+        font-size 14px
+        text-align center
+
+        &.image-credit
+            color #666
+            font-size 10px
+
+            a
+                color #666
+
+    &.alt-layout-50
+        width 50%
+        figcaption
+            text-align right
+    &.alt-layout-30-right
+        width 30%
+        float right
+        margin-left 20px
+        margin-bottom 10px
+        figcaption
+            text-align right
+    &.alt-layout-30-left
+        width 30%
+        float left
+        margin-right 20px
+        margin-bottom 10px
+        figcaption
+            text-align right
+    &.alt-layout-40-right
+        width 40%
+        float right
+        margin-left 20px
+        margin-bottom 10px
+        figcaption
+            text-align right
+    &.alt-layout-40-left
+        width 40%
+        float left
+        margin-right 20px
+        margin-bottom 10px
+        figcaption
+            text-align right
+    &.alt-layout-100
+        width 100%
