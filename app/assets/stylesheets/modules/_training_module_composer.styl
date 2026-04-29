@@ -549,10 +549,28 @@
         margin 0
         font-style italic
 
-// Mirror of training_modules/_slides.styl figure rules so the composer's
-// previews render the same as a live training slide. The composer page only
-// loads main.styl, not training.styl, so without this the figure styling
-// (border, layout classes) would not apply to the preview panes.
+// Mirror of training_modules/_slides.styl rules so the composer's previews
+// render the same as a live training slide. The composer page only loads
+// main.styl, not training.styl, so without these the slide styling (figure
+// border, content width, footer) would not apply to the preview panes.
+// Variables ($border_med_lt, $type_light, $slide_inner_content_width) live
+// inside training.styl, so their values are inlined here.
+.training__slide__content
+    margin-top 30px
+    margin-bottom 30px
+    width 750px
+    max-width 100%
+    margin-left auto
+    margin-right auto
+
+.training__slide__footer
+    width 100%
+    border-top 1px solid #ccc
+    margin-top 20px
+    padding-top 28px
+    font-size 16px
+    position relative
+
 .training__slide figure
     padding 10px
     border 1px solid #A0A0A0
@@ -610,3 +628,67 @@
             text-align right
     &.alt-layout-100
         width 100%
+
+.training_module_composer__preview
+    position fixed
+    inset 0
+    background #fff
+    z-index 1000
+    display flex
+    flex-direction column
+    overflow hidden
+
+    .training_module_composer__preview__header
+        display flex
+        align-items center
+        gap 16px
+        padding 12px 20px
+        border-bottom 1px solid #e0e0e0
+        background #f6f6f6
+        flex-shrink 0
+
+    .training_module_composer__preview__count
+        font-weight 600
+        font-size 0.95em
+
+    .training_module_composer__preview__hint
+        color #888
+        font-size 0.85em
+        flex 1
+
+    .training_module_composer__preview__close
+        background none
+        border none
+        font-size 1.6em
+        line-height 1
+        color #555
+        cursor pointer
+        padding 0 6px
+
+        &:hover
+            color #000
+
+    .training_module_composer__preview__article
+        flex 1
+        overflow-y auto
+        padding 30px 20px 60px
+        scroll-behavior smooth
+
+    .training_module_composer__preview__title
+        max-width 750px
+        margin 0 auto 10px
+        text-align center
+
+    .training_module_composer__preview__footer
+        max-width 750px
+        margin 30px auto 0
+        display flex
+        align-items center
+        gap 16px
+
+    .training_module_composer__preview__slug
+        flex 1
+        text-align center
+        color #888
+        font-size 0.85em
+        font-family "Menlo", "Consolas", monospace
