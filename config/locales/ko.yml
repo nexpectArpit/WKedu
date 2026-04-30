@@ -15,6 +15,7 @@
 # Author: Revi
 # Author: SeoJeongHo
 # Author: Suleiman the Magnificent Television
+# Author: Tensama0415
 # Author: YeBoy371
 # Author: Yearning
 # Author: Ykhwong
@@ -1047,5 +1048,8 @@ ko:
   question_groups:
     edit_question_group: 질문 그룹 편집
   form_search:
+    search: 검색
+    advanced_search: 고급 검색
+    clear: 지우기
     program_date: 프로그램 날짜
 ...
